@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "strbuf_helpers.h"
 #include "overlay_address.h"
 #include "monitor-client.h"
+#include "dataformats.h"
 
 #ifdef HAVE_UCRED_H
 #include <ucred.h>

@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "conf.h"
 #include "rhizome.h"
 #include "str.h"
+#include "dataformats.h"
 
 int rhizome_manifest_verify(rhizome_manifest *m)
 {

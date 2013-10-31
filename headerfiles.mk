@@ -13,9 +13,11 @@ HDRS=	fifo.h \
 	strbuf.h \
 	strbuf_helpers.h \
 	sha2.h \
+	network_coding.h \
 	conf.h \
 	conf_schema.h \
 	crypto.h \
+	dataformats.h \
 	log.h \
 	net.h \
 	fdqueue.h \
