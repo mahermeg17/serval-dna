@@ -193,14 +193,14 @@ int write_bytes(struct radio_state *s)
     wrote=8;
   if (s->last_char_ms)
     wrote = write(s->fd, s->rxbuffer, wrote);
-  if (wrote>0){
-    log_time();
-    fprintf(stderr, "Wrote to %s\n", s->name);
-    dump(NULL, s->rxbuffer, wrote);
-    if (wrote < s->rxb_len)
-      bcopy(&s->rxbuffer[wrote], s->rxbuffer, s->rxb_len - wrote);
-    s->rxb_len -= wrote;
-  }
+  if (wrote<=0)
+    abort();
+  log_time();
+  fprintf(stderr, "Wrote to %s\n", s->name);
+  dump(NULL, s->rxbuffer, wrote);
+  if (wrote < s->rxb_len)
+    bcopy(&s->rxbuffer[wrote], s->rxbuffer, s->rxb_len - wrote);
+  s->rxb_len -= wrote;
   return wrote;
 }
 
@@ -359,7 +359,7 @@ int transfer_bytes(struct radio_state *radios)
   if (bytes==0 || --t->tx_count<=0){
     // swap who's turn it is to transmit
     transmitter = receiver;
-    r->tx_count=6;
+    r->tx_count=3;
   }
   // set the wait time for the next transmission
   next_transmit_time = gettime_ms() + (bytes+10)/chars_per_ms;

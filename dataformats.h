@@ -18,8 +18,8 @@ int rhizome_str_is_file_hash(const char *text);
 void write_uint64(unsigned char *o,uint64_t v);
 void write_uint16(unsigned char *o,uint16_t v);
 void write_uint32(unsigned char *o,uint32_t v);
-uint64_t read_uint64(unsigned char *o);
-uint32_t read_uint32(unsigned char *o);
-uint16_t read_uint16(unsigned char *o);
+uint64_t read_uint64(const unsigned char *o);
+uint32_t read_uint32(const unsigned char *o);
+uint16_t read_uint16(const unsigned char *o);
 
 #endif

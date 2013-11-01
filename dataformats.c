@@ -201,7 +201,7 @@ void write_uint16(unsigned char *o,uint16_t v)
   { *(o++)=v&0xff; v=v>>8; }
 }
 
-uint64_t read_uint64(unsigned char *o)
+uint64_t read_uint64(const unsigned char *o)
 {
   int i;
   uint64_t v=0;
@@ -209,7 +209,7 @@ uint64_t read_uint64(unsigned char *o)
   return v;
 }
 
-uint32_t read_uint32(unsigned char *o)
+uint32_t read_uint32(const unsigned char *o)
 {
   int i;
   uint32_t v=0;
@@ -217,7 +217,7 @@ uint32_t read_uint32(unsigned char *o)
   return v;
 }
 
-uint16_t read_uint16(unsigned char *o)
+uint16_t read_uint16(const unsigned char *o)
 {
   int i;
   uint16_t v=0;
