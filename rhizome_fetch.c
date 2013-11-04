@@ -151,23 +151,14 @@ static const char * fetch_state(int state)
   }
 }
 
-int rhizome_active_fetch_count()
-{
-  int i,active=0;
-  for(i=0;i<NQUEUES;i++)
-    if (rhizome_fetch_queues[i].active.state!=RHIZOME_FETCH_FREE)
-      active++;
-  return active;
-}
-
-int rhizome_active_fetch_bytes_received(int q)
+static int rhizome_active_fetch_bytes_received(int q)
 {
   if (q<0 || q>=NQUEUES) return -1;
   if (rhizome_fetch_queues[q].active.state==RHIZOME_FETCH_FREE) return -1;
   return (int)rhizome_fetch_queues[q].active.write_state.file_offset;
 }
 
-int rhizome_fetch_queue_bytes(){
+static int rhizome_fetch_queue_bytes(){
   int i,j,bytes=0;
   for(i=0;i<NQUEUES;i++){
     if (rhizome_fetch_queues[i].active.state!=RHIZOME_FETCH_FREE){
@@ -180,6 +171,25 @@ int rhizome_fetch_queue_bytes(){
     }
   }
   return bytes;
+}
+
+void rhizome_fetch_log_short_status()
+{
+  int i,active=0;
+  for(i=0;i<NQUEUES;i++)
+    if (rhizome_fetch_queues[i].active.state!=RHIZOME_FETCH_FREE)
+      active++;
+  if (!active)
+    return;
+  
+  INFOF("Rhizome transfer progress: %d,%d,%d,%d,%d,%d (remaining %d)",
+	rhizome_active_fetch_bytes_received(0),
+	rhizome_active_fetch_bytes_received(1),
+	rhizome_active_fetch_bytes_received(2),
+	rhizome_active_fetch_bytes_received(3),
+	rhizome_active_fetch_bytes_received(4),
+	rhizome_active_fetch_bytes_received(5),
+	rhizome_fetch_queue_bytes());
 }
 
 int rhizome_fetch_status_html(strbuf b)
