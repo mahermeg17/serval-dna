@@ -411,7 +411,8 @@ overlay_interface_init(const char *name, struct in_addr src_addr, struct in_addr
   interface->ctsrts = ifconfig->ctsrts;
   set_destination_ref(&interface->destination, NULL);
   interface->destination = new_destination(interface, ifconfig->encapsulation);
-  
+  interface->reliable = 0;
+
   /* Pick a reasonable default MTU.
      This will ultimately get tuned by the bandwidth and other properties of the interface */
   interface->mtu = 1200;
@@ -532,6 +533,7 @@ overlay_interface_init(const char *name, struct in_addr src_addr, struct in_addr
     switch (ifconfig->socket_type) {
     case SOCK_STREAM:
       radio_link_init(interface);
+      interface->reliable = 1;
       interface->alarm.poll.events=POLLIN|POLLOUT;
       watch(&interface->alarm);
 
@@ -737,7 +739,8 @@ static void overlay_interface_poll(struct sched_ent *alarm)
     
     switch(interface->socket_type){
       case SOCK_STREAM:
-	return radio_link_tx(interface);
+	radio_link_tx(interface);
+	return;
       case SOCK_DGRAM:
 	break;
       case SOCK_FILE:
@@ -757,7 +760,8 @@ static void overlay_interface_poll(struct sched_ent *alarm)
   if (alarm->poll.revents & POLLOUT){
     switch(interface->socket_type){
       case SOCK_STREAM:
-	return radio_link_tx(interface);
+	radio_link_tx(interface);
+	return;
       case SOCK_DGRAM:
       case SOCK_FILE:
 	//XXX error? fatal?
@@ -774,7 +778,8 @@ static void overlay_interface_poll(struct sched_ent *alarm)
 	interface_read_stream(interface);
 	// if we read a valid heartbeat packet, we may be able to write more bytes now.
 	if (interface->state==INTERFACE_STATE_UP){
-	  return radio_link_tx(interface);
+	  radio_link_tx(interface);
+	  return;
 	}
 	break;
       case SOCK_FILE:
